@@ -66,18 +66,18 @@ def bench(count=10):
        ['20. Thinning                        ','thin(fbin)'],
        ['21. Watershed                       ','cwatershed(f,fbin)']]
     result = zeros((21),'d')
-    for t in xrange(len(tasks)):
-       print tasks[t][0],tasks[t][1]
+    for t in range(len(tasks)):
+       print(tasks[t][0],tasks[t][1])
        t1=time()
-       for k in xrange(count):
+       for k in range(count):
           a=eval(tasks[t][1])
        t2=time()
        result[t]= (t2-t1)/(count+0.0)
-    print version() +' Benchmark'
-    print 'Made on ',asctime(),' computer=',platform
-    print 'image filename=',filename,' width=', f.shape[1],', height=',f.shape[0]
-    print '    Function                            time (sec.)'
-    for j in xrange(21):
-     print tasks[j][0], result[j]
-    print '    Average                         ', average(result)
+    print(version() +' Benchmark')
+    print('Made on ',asctime(),' computer=',platform)
+    print('image filename=',filename,' width=', f.shape[1],', height=',f.shape[0])
+    print('    Function                            time (sec.)')
+    for j in range(21):
+     print(tasks[j][0], result[j])
+    print('    Average                         ', average(result))
     out=[]

@@ -41,8 +41,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'pymorph'
-copyright = u'2006-2010, Luis Pedro Coelho, Roberto A. Lotufo, and Rubens C. Machado'
+project = 'pymorph'
+copyright = '2006-2010, Luis Pedro Coelho, Roberto A. Lotufo, and Rubens C. Machado'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -169,8 +169,8 @@ htmlhelp_basename = 'pymorphdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'pymorph.tex', ur'pymorph Documentation',
-   ur'Luis Pedro Coelho, Roberto A. Lotufo, and Rubens C. Machado', 'manual'),
+  ('index', 'pymorph.tex', r'pymorph Documentation',
+   r'Luis Pedro Coelho, Roberto A. Lotufo, and Rubens C. Machado', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

@@ -113,8 +113,8 @@ pattern recognition and image analysis.
 - `to_uint8()`     : Convert an image to an uint8 image.
 
 """
-from __future__ import division
-from pymorph_version import __version__, __version_info__
+
+# from pymorph_version import __version__, __version_info__
 
 import sys, os
 mydir = os.path.dirname(__file__)
@@ -257,7 +257,7 @@ def concat(dim, *imgs):
     import string
     dimcode = string.lower(dim)[0]
     if not imgs:
-        raise ValueError, 'pymorph.concat: received empty image list'
+        raise ValueError('pymorph.concat: received empty image list')
     shapes = np.array([img.shape for img in imgs])
     varies = shapes.var(0).astype(bool)
     if  (dimcode == 'w' and varies[0]) or \
@@ -280,7 +280,7 @@ def concat(dim, *imgs):
     elif dimcode == 'd':
         return np.dstack(imgs)
     else:
-        raise ValueError, 'pymorph.concat: Unknown direction "%s"' % dim
+        raise ValueError('pymorph.concat: Unknown direction "%s"' % dim)
 
 
 def limits(f):
@@ -601,7 +601,7 @@ def isolines(X, N=10):
 
     def apply_lut(img, lut):
         h,w=img.shape
-        return reshape(map(lut.__getitem__, img.ravel()),(h,w,3))
+        return reshape(list(map(lut.__getitem__, img.ravel())),(h,w,3))
     np = 1  # number of pixels by isoline
     if len(X.shape) == 1: X = X[newaxis,:]
     maxi, mini = X.max(), X.min()
@@ -614,8 +614,8 @@ def isolines(X, N=10):
     gray = repeat(gray, d)[0:256]
     gray = transpose([gray,gray,gray])
     # lut jet
-    r = concatenate((range(126,0,-4),zeros(64),range(0,255,4),255*ones(64),range(255,128,-4)))
-    g = concatenate((zeros(32),range(0,255,4),255*ones(64),range(255,0,-4),zeros(32)))
+    r = concatenate((list(range(126,0,-4)),zeros(64),list(range(0,255,4)),255*ones(64),list(range(255,128,-4))))
+    g = concatenate((zeros(32),list(range(0,255,4)),255*ones(64),list(range(255,0,-4)),zeros(32)))
     b = 255 - r
     jet = transpose([r,g,b])
     # apply lut
@@ -741,7 +741,7 @@ def label(f, Bc=None):
     labeledflat=labeled.ravel()
     label = 1
     queue = []
-    for i in xrange(f.size):
+    for i in range(f.size):
         if f[i] and labeledflat[i] == 0:
             labeledflat[i]=label
             queue=[i+bi for bi in neighbours]
@@ -989,7 +989,7 @@ def areaopen(f, a, Bc=None):
       zero = binary(y)
       k1 = f.min()
       k2 = f.max()
-      for k in xrange(k1,k2+1):   # gray-scale, use thresholding decomposition
+      for k in range(k1,k2+1):   # gray-scale, use thresholding decomposition
         fk = threshad(f,k)
         fo = areaopen(fk,a,Bc)
         if isequal(fo,zero):
@@ -1028,9 +1028,9 @@ def asf(f, seq="OC", B=None, n=1):
     if B is None: B = secross()
     seq = upper(seq)
     ops = { 'O' : open, 'C' : close }
-    ops = map(ops.get, reversed(seq))
+    ops = list(map(ops.get, reversed(seq)))
 
-    for i in xrange(n):
+    for i in range(n):
         Bn = sesum(B, i+1)
         for op in ops:
             f = op(f, Bn)
@@ -1072,7 +1072,7 @@ def asfrec(f, seq="OC", B=None, Bc=None, N=1):
     secondop = openrec
     if seq == 'CO':
         firstop, secondop = secondop, firstop
-    for i in xrange(N):
+    for i in range(N):
         Bn = sesum(B, i+1)
         f = firstop(f, Bn, Bc)
         f = secondop(f, Bn, Bc)
@@ -1156,7 +1156,7 @@ def blob(f, measurement, output="image"):
         y = zeros(f.shape,numpy.bool)
     else:
         y = zeros(f.shape,numpy.int32)
-    for obj_id in xrange(f.max()):
+    for obj_id in range(f.max()):
         blob = (f == (obj_id+1))
         if measurement == 'area':
             area = blob.sum()
@@ -1203,7 +1203,7 @@ def cbisector(f, B, n):
     y : Binary image.
     """
     y = intersec(f,0)
-    for i in xrange(n):
+    for i in range(n):
         nb = sesum(B,i)
         nbp = sesum(B,i+1)
         f1 = erode(f,nbp)
@@ -1237,7 +1237,7 @@ def cdilate(f, g, Bc=None, n=1):
 
     if Bc is None: Bc = secross()
     f = intersec(f,g)
-    for i in xrange(n):
+    for i in range(n):
         prev = f
         f = intersec(dilate(f, Bc), g)
         if isequal(f, prev): break
@@ -1268,7 +1268,7 @@ def cerode(f, g, Bc=None, n=1):
 
     if Bc is None: Bc = secross()
     f = union(f,g)
-    for i in xrange(n):
+    for i in range(n):
         prev = f
         f = union(erode(f,Bc),g)
         if isequal(f, prev): break
@@ -1410,9 +1410,9 @@ def cthick(f, g, Iab=None, n=-1, theta=45, direction="clockwise"):
     assert isbinary(f), 'pymorph.cthick: f must be binary image'
 
     direction = upper(direction)
-    for i in xrange(n):
+    for i in range(n):
         prev = f
-        for t in xrange(0,360,theta):
+        for t in range(0,360,theta):
             sup = supgen(f, interot(Iab, t, direction))
             f = intersec(union(f, sup),g)
         if isequal(prev, f): break
@@ -1449,9 +1449,9 @@ def cthin(f, g, Iab=None, n=-1, theta=45, direction="clockwise"):
     assert isbinary(f),'f must be binary image'
     direction = upper(direction)
     if n == -1: n = f.size
-    for i in xrange(n):
+    for i in range(n):
         prev = f
-        for t in xrange(0,360,theta):
+        for t in range(0,360,theta):
             sup = supgen(f, interot(Iab, t, direction))
             y = union(subm(f, sup),g)
         if isequal(prev, f): break
@@ -1585,7 +1585,7 @@ def dilate(f, B=None):
             v = intersec(gray(v,'int32'),0)
         mh,mw = max(abs(x)[:,0]),max(abs(x)[:,1])
         y = (ones((h+2*mh,w+2*mw),int32) * limits(f)[0]).astype(f.dtype)
-        for i in xrange(x.shape[0]):
+        for i in range(x.shape[0]):
             if v[i] > -2147483647:
                 y[mh+x[i,0]:mh+x[i,0]+h, mw+x[i,1]:mw+x[i,1]+w] = maximum(
                     y[mh+x[i,0]:mh+x[i,0]+h, mw+x[i,1]:mw+x[i,1]+w], add4dilate(f,v[i]))
@@ -1669,7 +1669,7 @@ def drawv(f, data, value, geometry):
         # http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
         # To match the Wikipedia version
         # the coordinates are expressed in *x,y* convention!
-        for val,(x0,y0),(x1,y1) in itertools.izip(value,data[:-1], data[1:]):
+        for val,(x0,y0),(x1,y1) in zip(value,data[:-1], data[1:]):
             steep = (abs(y1 - y0) > abs(x1 - x0))
             if steep:
                 y0,x0 = x0,y0
@@ -1682,7 +1682,7 @@ def drawv(f, data, value, geometry):
             error = deltax // 2
             y = y0
             ystep = (1 if y0 < y1 else -1)
-            for x in xrange(x0, x1+1):
+            for x in range(x0, x1+1):
                 if steep: res[y,x] = val
                 else: res[x,y] = val
                 error -= deltay
@@ -1928,7 +1928,7 @@ def grain(f, labels, measurement, option="image"):
         y = zeros(labels.shape)
     fdata = f.ravel()
     labelsravel = labels.ravel()
-    for obj_id in xrange(labelsravel.max()):
+    for obj_id in range(labelsravel.max()):
         pixels = fdata[labelsravel == (obj_id + 1)]
         if measurement == 'max':
             val = pixels.max()
@@ -1941,9 +1941,9 @@ def grain(f, labels, measurement, option="image"):
         elif measurement == 'std':
             val = pixels.std()
         elif measurement == 'std1':
-            print "'std1' is not implemented"
+            print("'std1' is not implemented")
         else:
-            print "measurement should be 'max', 'min', 'mean', 'sum', 'std', 'std1'."
+            print("measurement should be 'max', 'min', 'mean', 'sum', 'std', 'std1'.")
         if is_data:
             y.append(val)
         else:
@@ -2185,7 +2185,7 @@ def infcanon(f, Iab, theta=45, direction='clockwise'):
 
     direction = upper(direction)
     y = union(f,1)
-    for t in xrange(0,360,theta):
+    for t in range(0,360,theta):
         Irot = interot(Iab, t, direction)
         y = intersec(y, infgen(f, Irot))
     return y
@@ -2436,8 +2436,8 @@ def intershow(Iab):
     assert (type(Iab) is tuple) and (len(Iab) == 2),'pymorph.intershow: not proper format of hit-or-miss template'
     A,B = Iab
     s = ''
-    for y in xrange(A.shape[0]):
-        for x in xrange(A.shape[1]):
+    for y in range(A.shape[0]):
+        for x in range(A.shape[1]):
             if A[y,x]:
                 s += '1 '
             elif B[y,x]:
@@ -2833,7 +2833,7 @@ def opentransf(f, type='octagon', n=65535, Bc=None, Buser=None):
             'pymorph.opentransf: only accepts octagon, chessboard, \
                 city-block, linear-h, linear-v, linear-45r, linear-45l, or user as type, or with suffix -rec.'
     y = np.zeros(f.shape, np.uint8)
-    for k in xrange(n):
+    for k in range(n):
         prev = y
         if disk_se:
             a = open(f, sedisk(k, 2, type))
@@ -3005,7 +3005,7 @@ def regmin(f, Bc=None, option="binary"):
     """
 
     if option != 'binary':
-        raise ValueError, "pymorph.regmin only implements option 'binary'"
+        raise ValueError("pymorph.regmin only implements option 'binary'")
     if Bc is None: Bc = secross()
     fplus = addm(f,1)
     g = subm(suprec(fplus,f,Bc),f)
@@ -3292,7 +3292,7 @@ def seline(length=3, theta=0):
         s  = sign(sin(theta))
         x1 = arange(length) * sin(theta)
         x0 = floor(x1 / tan(theta) + 0.5)
-    x = array(zip(x0, x1), int)
+    x = array(list(zip(x0, x1)), int)
     B = set2mat((x,))
     return B
 
@@ -3407,7 +3407,7 @@ def sesum(B=None, N=1):
         if isbinary(B): return binary([[1]])
         else:           return to_int32([[0]]) # identity
     NB = B
-    for i in xrange(N-1):
+    for i in range(N-1):
         NB = sedilate(NB,B)
     return NB
 
@@ -3491,7 +3491,7 @@ def sedilate(B1, B2):
        Bo = binary([0])
     x,v = mat2set(B2)
     if len(x):
-        for i in xrange(x.shape[0]):
+        for i in range(x.shape[0]):
             s = add4dilate(B1,v[i])
             st= setrans(s,x[i])
             Bo = seunion(Bo,st)
@@ -3601,7 +3601,7 @@ def skelm(f, B=None, return_binary=True):
     y = gray(intersec(f, k1),'uint16')
     iszero = asarray(y)
     nb = sesum(B,0)
-    for r in xrange(1,65535):
+    for r in range(1,65535):
         ero = erode(f,nb)
         if isequal(ero, iszero): break
         f1 = openth(ero, B)
@@ -3644,7 +3644,7 @@ def skelmrec(f, B=None):
     """
     if B is None: B = secross()
     y = binary(intersec(f, 0))
-    for r in xrange(f.max(),1,-1):
+    for r in range(f.max(),1,-1):
         y = dilate(union(y,binary(f,r)), B)
     return union(y, binary(f,1))
 
@@ -3784,7 +3784,7 @@ def supcanon(f, Iab, theta=45, direction="clockwise"):
     y : Binary image.
     """
     y = intersec(f,0)
-    for t in xrange(0,360,theta):
+    for t in range(0,360,theta):
         Irot = interot(Iab, t, direction)
         y = union(y, supgen(f, Irot))
     return y
@@ -3902,12 +3902,12 @@ def bshow(f1, f2=None, f3=None, factor=17):
     if f2 is not None and f1.shape != f2.shape or \
         f3 is not None and f1.shape != f3.shape or \
         f2 is not None and f3 is not None and f2.shape != f3.shape:
-        raise ValueError, 'pymorph.bshow: arguments must have the same shape'
+        raise ValueError('pymorph.bshow: arguments must have the same shape')
     s = factor
     if factor < 9: s = 9
     h,w = f1.shape
     y = zeros((s*h, s*w),numpy.int32)
-    xc = resize(range(s), (s,s))
+    xc = resize(list(range(s)), (s,s))
     yc = transpose(xc)
     r  = int(floor((s-8)/2. + 0.5))
     circle = (xc - s//2)**2 + (yc - s//2)**2 <= r**2
@@ -3917,8 +3917,8 @@ def bshow(f1, f2=None, f3=None, factor=17):
     fillrect[s-1, : ] = 0
     fillrect[ : , 0 ] = 0
     fillrect[ : ,s-1] = 0
-    for i in xrange(h):
-        for j in xrange(w):
+    for i in range(h):
+        for j in range(w):
             m, n = s*i, s*j
             if f1 and f1[i,j]:
                 y[m     ,n:n+s] = 1
@@ -4004,9 +4004,9 @@ def thick(f, Iab=None, n=-1, theta=45, direction="clockwise"):
     if n == -1: n = product(f.shape)
     y = f
     zero = intersec(f,0)
-    for i in xrange(n):
+    for i in range(n):
         aux = zero
-        for t in xrange(0,360,theta):
+        for t in range(0,360,theta):
             sup = supgen(y, interot(Iab, t, direction))
             aux = union(aux, sup)
             y = union(y, sup)
@@ -4057,9 +4057,9 @@ def thin(f, Iab=None, n=-1, theta=45, direction="clockwise"):
     if n == -1: n = product(f.shape)
     y = f
     zero = intersec(f,0)
-    for i in xrange(n):
+    for i in range(n):
         aux = zero
-        for t in xrange(0,360,theta):
+        for t in range(0,360,theta):
             sup = supgen(y, interot(Iab, t, direction))
             aux = union(aux, sup)
             y = subm(y, sup)
@@ -4291,7 +4291,7 @@ def to_gray(f):
     if len(f.shape) == 2:
         return f
     if len(f.shape) != 3:
-        raise ValueError, 'pymorph.to_gray: can only handle gray and colour images'
+        raise ValueError('pymorph.to_gray: can only handle gray and colour images')
     r = f[:,:,0]
     g = f[:,:,1]
     b = f[:,:,2]
@@ -4447,7 +4447,7 @@ def set2mat(A):
         x = A[0]
         v = np.ones((len(x),), np.uint8)
     else:
-        raise TypeError, 'pymorph.set2mat: argument must be a tuple of length 1 or 2'
+        raise TypeError('pymorph.set2mat: argument must be a tuple of length 1 or 2')
     if len(x) == 0:  return array([0]).astype(v.dtype)
     if len(x.shape) == 1: x = x[newaxis,:]
     dh,dw = abs(x).max(0)

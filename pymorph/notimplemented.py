@@ -51,7 +51,7 @@ def swatershed(f, g, B=None, LINEREG="LINES"):
     """
 
     if B is None: B = secross()
-    print 'Not implemented yet'
+    print('Not implemented yet')
     return None
     return y
 
@@ -78,7 +78,7 @@ def vmax(f, v=1, Bc=None):
     """
 
     if Bc is None: Bc = secross()
-    raise NotImplementedError, 'Not implemented yet'
+    raise NotImplementedError('Not implemented yet')
 
 
 def flood(fin, T, option, Bc=None):
@@ -117,4 +117,4 @@ def flood(fin, T, option, Bc=None):
     """
 
     if Bc is None: Bc = secross()
-    raise NotImplementedError, 'pymorph.flood'
+    raise NotImplementedError('pymorph.flood')

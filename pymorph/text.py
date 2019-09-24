@@ -1,6 +1,6 @@
 __all__ = ['text']
 import numpy as np
-from mmorph import concat
+from .mmorph import concat
 FontDft = np.array([
     [[0,   0,   0,   0,   0,   0,   0,   0,   0,],
      [0,   0,   0,   0,   0,   0,   0,   0,   0,],
@@ -1536,7 +1536,7 @@ def text(txt):
     for i,ch in enumerate(txt):
       ind = ord(ch) - FIRST_CHAR
       assert ind < N_CHARS,'pymorph.text: code not allowed (%s)' % ch
-      print(ch, ind)
+      print((ch, ind))
       glyph = FontDft[ind]
       if i == 0:
         y = glyph

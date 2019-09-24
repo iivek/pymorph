@@ -3,12 +3,12 @@ try:
     import setuptools
 except ImportError:
     import sys
-    print >>sys.stderr, '''\
+    print('''\
 Could not import `setuptools` module.
 
 Please install it.
 
-Under Ubuntu, it is in a package called `python-setuptools`.'''
+Under Ubuntu, it is in a package called `python-setuptools`.''', file=sys.stderr)
     sys.exit(1)
 
 from setuptools import setup, find_packages

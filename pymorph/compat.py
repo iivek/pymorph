@@ -1,9 +1,9 @@
 import warnings
 warnings.warn('pymorph.compat should be replaced with pymorph', DeprecationWarning)
 
-from notimplemented import *
-from mmorph import *
-from text import *
+from .notimplemented import *
+from .mmorph import *
+from .text import *
 
 # old abbreviations:
 
@@ -24,7 +24,7 @@ randomcolour=randomcolor
 
 def _not_implemented(msg):
     def f(*args, **kwargs):
-        raise NotImplementedError, msg
+        raise NotImplementedError(msg)
     f.__doc__ = '''\
 This function is not implemented anymore.
 
@@ -428,7 +428,7 @@ def plot(plotitems=[], options=[], outfig=-1, filename=None):
             return outfig
         else:
             #assert 0, "plot error: There is no current figure\n"
-            print "plot error: There is no current figure\n"
+            print("plot error: There is no current figure\n")
             return 0
     # figure to be plotted
     if ((outfig < 0) and _figs[0]):
@@ -440,15 +440,15 @@ def plot(plotitems=[], options=[], outfig=-1, filename=None):
         outfig = len(_figs)
     elif outfig >= len(_figs):
         #assert 0, 'plot error: Figure ' + str(outfig) + 'does not exist\n'
-        print 'plot error: Figure ' + str(outfig) + 'does not exist\n'
+        print('plot error: Figure ' + str(outfig) + 'does not exist\n')
         return 0
     #current figure
     _figs[0] = outfig
     # Gnuplot pointer
     if newfig:
         if len(_figs) > 20:
-            print '''plot error: could not create figure. Too many PlotItems in memory (20). Use
-                     plot('reset') to clear table'''
+            print('''plot error: could not create figure. Too many PlotItems in memory (20). Use
+                     plot('reset') to clear table''')
             return 0
 
         g = Gnuplot.Gnuplot()
@@ -476,9 +476,9 @@ def plot(plotitems=[], options=[], outfig=-1, filename=None):
             elif option[0] == 'style':
                 g('set data style ' + option[1])
             else:
-                print "plot warning: Unknown option: " + option[0]
+                print("plot warning: Unknown option: " + option[0])
     except:
-        print "plot warning: Bad usage in options! Using default values. Please, use help.\n"
+        print("plot warning: Bad usage in options! Using default values. Please, use help.\n")
     # Plot items: item[0]=x, item[1]=y, item[2]=style
     for item in plotitems:
         try:
@@ -503,7 +503,7 @@ def plot(plotitems=[], options=[], outfig=-1, filename=None):
             if newfig:
                 _figs.pop()
             #assert 0, "plot error: Bad usage in plotitems! Impossible to plot graph. Please, use help.\n"
-            print "plot error: Bad usage in plotitems! Impossible to plot graph. Please, use help.\n"
+            print("plot error: Bad usage in plotitems! Impossible to plot graph. Please, use help.\n")
             return 0
     # PNG file
     if filename:
@@ -656,14 +656,14 @@ def readgray(filename):
                                           y[0,:,:] == y[2,:,:])):
           y = y[0,:,:]
        else:
-          print 'Warning: converting true-color RGB image to gray'
+          print('Warning: converting true-color RGB image to gray')
           y = ubyte(0.2989 * y[0,:,:] + 
                       0.5870 * y[1,:,:] + 
                       0.1140 * y[2,:,:])
     elif (len(y.shape) == 2):
        pass
     else:
-       raise ValueError, 'Error, it is not 2D image'
+       raise ValueError('Error, it is not 2D image')
     return y
 
 
