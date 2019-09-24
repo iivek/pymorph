@@ -12,9 +12,8 @@ Under Ubuntu, it is in a package called `python-setuptools`.'''
     sys.exit(1)
 
 from setuptools import setup, find_packages
-execfile('pymorph/pymorph_version.py')
-
-long_description = file('README.rst').read()
+# execfile('pymorph/pymorph_version.py')
+# long_description = file('README.rst').read()
 
 classifiers = [
     'Development Status :: 5 - Production/Stable',
@@ -27,9 +26,9 @@ classifiers = [
     ]
 
 setup(name='pymorph',
-      version=__version__,
+      version=0.95,
       description='Image Morphology Toolbox',
-      long_description=long_description,
+      long_description='https://github.com/luispedro/pymorph',
       author='Luis Pedro Coelho',
       author_email='lpc@cmu.edu',
       url='http://luispedro.org/software/pymorph/',
